@@ -28,7 +28,7 @@
             </div>
             <form @submit.prevent="login" class="space-y-4">
                 <div>
-                    <input type="password" x-model="passcode" placeholder="Enter family passcode" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-center font-medium tracking-widest text-slate-800">
+                    <input type="password" x-model="passcode" placeholder="Enter family passcode" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-center font-medium tracking-widest text-slate-800 text-base sm:text-sm">
                     <p x-show="loginError" class="text-xs text-rose-600 mt-2 font-medium">Incorrect passcode. Please try again.</p>
                 </div>
                 <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-sky-600/30">
@@ -45,35 +45,35 @@
         </div>
         <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent z-10"></div>
 
-        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase bg-sky-500/20 text-sky-300 border border-sky-400/30 mb-4 backdrop-blur-md">
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-24 text-center">
+            <span class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase bg-sky-500/20 text-sky-300 border border-sky-400/30 mb-4 backdrop-blur-md">
                 <i class="fa-solid fa-users"></i> Multi-Generational Family Expedition (8 Travelers: 4 Adults, 2 Teens, 2 Seniors)
             </span>
-            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4 text-white">
+            <h1 class="text-3xl sm:text-6xl font-extrabold tracking-tight mb-4 text-white">
                 Our Newfoundland <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-teal-300">Adventure 2027</span>
             </h1>
-            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-300 mb-8 font-light">
+            <p class="max-w-2xl mx-auto text-base sm:text-xl text-slate-300 mb-8 font-light px-2">
                 Detailed route planning, multi-generational pacing, and travel mode comparison.
             </p>
 
-            <!-- Navigation Tabs -->
-            <div class="flex flex-wrap justify-center gap-2 sm:gap-4">
-                <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+            <!-- Navigation Tabs (Mobile scrollable / Desktop wrap) -->
+            <div class="flex overflow-x-auto sm:flex-wrap justify-start sm:justify-center gap-2 sm:gap-4 pb-3 sm:pb-0 scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
+                <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-map"></i> Route & Demographics
                 </button>
-                <button @click="activeTab = 'itinerary'" :class="activeTab === 'itinerary' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                <button @click="activeTab = 'itinerary'" :class="activeTab === 'itinerary' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-calendar-days"></i> Itinerary
                 </button>
-                <button @click="activeTab = 'suv-plan'" :class="activeTab === 'suv-plan' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                <button @click="activeTab = 'suv-plan'" :class="activeTab === 'suv-plan' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-car-side"></i> Flight & SUV Plan
                 </button>
-                <button @click="activeTab = 'packing'" :class="activeTab === 'packing' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                <button @click="activeTab = 'packing'" :class="activeTab === 'packing' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-suitcase"></i> Detailed Packing List
                 </button>
-                <button @click="activeTab = 'ai-chat'" :class="activeTab === 'ai-chat' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                <button @click="activeTab = 'ai-chat'" :class="activeTab === 'ai-chat' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-robot"></i> AI Trip Assistant
                 </button>
-                <button @click="activeTab = 'comments'" :class="activeTab === 'comments' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                <button @click="activeTab = 'comments'" :class="activeTab === 'comments' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-comments"></i> Family Comments & Notes
                 </button>
             </div>
@@ -567,7 +567,7 @@
 
         <!-- TAB 5: AI TRIP ASSISTANT -->
         <div x-show="activeTab === 'ai-chat'" x-transition.opacity.duration.300ms class="space-y-6 max-w-4xl mx-auto">
-            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 flex flex-col h-[700px]">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 flex flex-col h-[520px] sm:h-[700px]">
                 <div class="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shadow-sm">
@@ -587,7 +587,7 @@
                 <div class="flex-grow overflow-y-auto space-y-4 pr-2 mb-4" id="chat-container">
                     <template x-for="msg in chatMessages" :key="msg.id">
                         <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
-                            <div :class="msg.role === 'user' ? 'bg-sky-600 text-white rounded-2xl rounded-tr-none' : 'bg-slate-100 text-slate-800 rounded-2xl rounded-tl-none'" class="max-w-[80%] p-4 text-sm leading-relaxed shadow-sm">
+                            <div :class="msg.role === 'user' ? 'bg-sky-600 text-white rounded-2xl rounded-tr-none' : 'bg-slate-100 text-slate-800 rounded-2xl rounded-tl-none'" class="max-w-[85%] sm:max-w-[80%] p-4 text-sm leading-relaxed shadow-sm">
                                 <span class="block text-[10px] font-bold uppercase tracking-wider mb-1 opacity-75" x-text="msg.role === 'user' ? 'You' : 'AI Assistant'"></span>
                                 <p x-text="msg.text"></p>
                             </div>
@@ -596,10 +596,10 @@
                 </div>
 
                 <!-- Chat Input Form -->
-                <form @submit.prevent="sendChat" class="flex gap-3 pt-4 border-t border-slate-100">
-                    <input type="text" x-model="userMessage" placeholder="Ask a question (e.g., 'Who is in SUV #2?' or 'When are we flying?')..." class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
-                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2 text-sm">
-                        <i class="fa-solid fa-paper-plane"></i> Send
+                <form @submit.prevent="sendChat" class="flex gap-2 sm:gap-3 pt-4 border-t border-slate-100">
+                    <input type="text" x-model="userMessage" placeholder="Ask a question..." class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-base sm:text-sm">
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 sm:px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2 text-sm flex-shrink-0">
+                        <i class="fa-solid fa-paper-plane"></i> <span class="hidden sm:inline">Send</span>
                     </button>
                 </form>
             </div>
@@ -626,11 +626,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Your Name</label>
-                            <input type="text" x-model="newComment.name" required placeholder="e.g. Jordan, Michelle..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white">
+                            <input type="text" x-model="newComment.name" required placeholder="e.g. Jordan, Michelle..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-base sm:text-sm bg-white">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Category</label>
-                            <select x-model="newComment.category" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white">
+                            <select x-model="newComment.category" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-base sm:text-sm bg-white">
                                 <option value="Itinerary">Itinerary</option>
                                 <option value="Flights & SUVs">Flights & SUVs</option>
                                 <option value="Packing List">Packing List</option>
@@ -640,7 +640,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Your Comment / Edit Request</label>
-                        <textarea x-model="newComment.text" required rows="3" placeholder="What would you like to suggest or change?" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white"></textarea>
+                        <textarea x-model="newComment.text" required rows="3" placeholder="What would you like to suggest or change?" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-base sm:text-sm bg-white"></textarea>
                     </div>
                     <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm flex items-center gap-2">
                         <i class="fa-solid fa-paper-plane"></i> Submit Note
