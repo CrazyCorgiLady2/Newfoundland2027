@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newfoundland Family Adventure 2027 (8 Travelers)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between" x-data="tripApp()">
+
+    <!-- Family Access Password Gate Overlay -->
+    <div x-show="!isLoggedIn" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl space-y-6 text-center border border-slate-100">
+            <div class="w-16 h-16 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-2xl font-extrabold text-slate-900">Family Members Only</h2>
+                <p class="text-sm text-slate-500">
+                    Please enter the family access passcode to view the Newfoundland 2027 trip planner.
+                </p>
+            </div>
+            <form @submit.prevent="login" class="space-y-4">
+                <div>
+                    <input type="password" x-model="passcode" placeholder="Enter family passcode" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-center font-medium tracking-widest text-slate-800">
+                    <p x-show="loginError" class="text-xs text-rose-600 mt-2 font-medium">Incorrect passcode. Please try again.</p>
+                </div>
+                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-sky-600/30">
+                    Unlock Planner
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header / Hero Section with User-Provided Gros Morne Banner -->
+    <header class="relative bg-slate-900 text-white overflow-hidden shadow-xl">
+        <div class="absolute inset-0 z-0 opacity-50">
+            <img src="./pictures/gros_morne.webp" alt="Gros Morne National Park Fjord" class="w-full h-full object-cover">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent z-10"></div>
+
+        <div class="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase bg-sky-500/20 text-sky-300 border border-sky-400/30 mb-4 backdrop-blur-md">
+                <i class="fa-solid fa-users"></i> Multi-Generational Family Expedition (8 Travelers: 4 Adults, 2 Teens, 2 Seniors)
+            </span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4 text-white">
+                Our Newfoundland <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-teal-300">Adventure 2027</span>
+            </h1>
+            <p class="max-w-2xl mx-auto text-lg sm:text-xl text-slate-300 mb-8 font-light">
+                Detailed route planning, multi-generational pacing, and travel mode comparison.
+            </p>
+
+            <!-- Navigation Tabs -->
+            <div class="flex flex-wrap justify-center gap-2 sm:gap-4">
+                <button @click="activeTab = 'overview'" :class="activeTab === 'overview' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-map"></i> Route & Demographics
+                </button>
+                <button @click="activeTab = 'itinerary'" :class="activeTab === 'itinerary' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-days"></i> Itinerary
+                </button>
+                <button @click="activeTab = 'suv-plan'" :class="activeTab === 'suv-plan' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-car-side"></i> Flight & SUV Plan
+                </button>
+                <button @click="activeTab = 'packing'" :class="activeTab === 'packing' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-suitcase"></i> Detailed Packing List
+                </button>
+                <button @click="activeTab = 'ai-chat'" :class="activeTab === 'ai-chat' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-robot"></i> AI Trip Assistant
+                </button>
+                <button @click="activeTab = 'comments'" :class="activeTab === 'comments' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2">
+                    <i class="fa-solid fa-comments"></i> Family Comments & Notes
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- TAB 1: OVERVIEW & ROUTE -->
+        <div x-show="activeTab === 'overview'" x-transition.opacity.duration.300ms class="space-y-10">
+            
+            <!-- User-Provided Newfoundland Photos Showcase Grid -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-images text-sky-600"></i> Our Newfoundland Photo Gallery
+                    </h3>
+                    <span class="text-xs text-slate-500 font-medium bg-white px-3 py-1 rounded-full border border-slate-200">5 Featured Family Locations</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Photo 1: Gros Morne -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
+                        <div class="h-60 relative overflow-hidden">
+                            <img src="./pictures/gros_morne.webp" alt="Gros Morne Fjord" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-base">Gros Morne National Park</h4>
+                            <p class="text-xs text-slate-500 mt-1">Majestic glacial fjords and hiking vistas.</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo 2: Battle Harbour -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
+                        <div class="h-60 relative overflow-hidden">
+                            <img src="./pictures/battle_harbour.webp" alt="Battle Harbour Coastal Outport" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-base">Coastal Outport & Boardwalk</h4>
+                            <p class="text-xs text-slate-500 mt-1">Traditional wooden boardwalks and outport houses.</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo 3: Bonavista -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
+                        <div class="h-60 relative overflow-hidden">
+                            <img src="./pictures/bonavista.webp" alt="Bonavista Waterfront & Pier" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-base">Bonavista Harbor & Pier</h4>
+                            <p class="text-xs text-slate-500 mt-1">Scenic coastal stairs and historic yellow buildings.</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo 4: St. John's -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
+                        <div class="h-60 relative overflow-hidden">
+                            <img src="./pictures/st_johns.webp" alt="St. John's Jellybean Row" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-base">St. John's Jellybean Row</h4>
+                            <p class="text-xs text-slate-500 mt-1">Vibrant historic colored downtown houses.</p>
+                        </div>
+                    </div>
+
+                    <!-- Photo 5: Twillingate -->
+                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition lg:col-span-2">
+                        <div class="h-60 relative overflow-hidden">
+                            <img src="./pictures/twilingate.webp" alt="Twillingate Icebergs" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        </div>
+                        <div class="p-5">
+                            <h4 class="font-bold text-slate-900 text-base">Twillingate Icebergs & Atlantic Waters</h4>
+                            <p class="text-xs text-slate-500 mt-1">Majestic icebergs drifting along the northern coast.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left 2 Cols: Intro & Route Estimation -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                        <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-lg"><i class="fa-solid fa-users-rectangle"></i></span>
+                            Our Group Profile (8 Travelers)
+                        </h2>
+                        <p class="text-slate-600 leading-relaxed mb-6">
+                            Planning for <strong class="text-slate-900">4 adults, 2 teenagers, and 2 seniors</strong> requires a thoughtful balance between comfort, pacing, and excitement. Seniors will appreciate stable accommodations and accessible viewpoints, teenagers will enjoy engaging coastal hikes and photography spots, and adults will manage the logistics.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 border-t border-slate-100 text-center">
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-xl font-bold text-sky-600">4</span>
+                                <span class="text-xs text-slate-500 font-medium">Adults</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-xl font-bold text-sky-600">2</span>
+                                <span class="text-xs text-slate-500 font-medium">Teenagers</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-xl font-bold text-sky-600">2</span>
+                                <span class="text-xs text-slate-500 font-medium">Seniors</span>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <span class="block text-xl font-bold text-sky-600">14 Days</span>
+                                <span class="text-xs text-slate-500 font-medium">Duration</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Route Estimates -->
+                    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                            <span class="w-10 h-10 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center text-lg"><i class="fa-solid fa-route"></i></span>
+                            Detailed Route & Driving Estimates (Island Loop)
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">A</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Ferry Crossing: North Sydney, NS ➔ Port aux Basques, NL</h4>
+                                    <p class="text-sm text-slate-500 mt-0.5">~6 to 7 hours crossing time on Marine Atlantic. Cabins recommended for seniors and comfort.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">B</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Port aux Basques ➔ Gros Morne National Park</h4>
+                                    <p class="text-sm text-slate-500 mt-0.5">Distance: ~300 km | Driving Time: ~3.5 hours along the scenic Trans-Canada Highway (Route 1).</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">C</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Gros Morne ➔ Twillingate (Iceberg Alley)</h4>
+                                    <p class="text-sm text-slate-500 mt-0.5">Distance: ~390 km | Driving Time: ~4.5 hours across central Newfoundland.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">D</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Twillingate ➔ Bonavista / Trinity Peninsula</h4>
+                                    <p class="text-sm text-slate-500 mt-0.5">Distance: ~280 km | Driving Time: ~3 hours through coastal outports.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500 text-white flex items-center justify-center font-bold text-sm flex-shrink-0">E</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900">Bonavista ➔ St. John's & Cape Spear</h4>
+                                    <p class="text-sm text-slate-500 mt-0.5">Distance: ~320 km | Driving Time: ~3.5 hours to the easternmost capital.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-4 italic"><i class="fa-solid fa-info-circle mr-1"></i> Total island driving distance is approximately 1,600 km one-way across the loop. Adding rest stops and scenic detours ensures a comfortable pace for seniors.</p>
+                    </div>
+                </div>
+
+                <!-- Right Col: Senior & Teen Considerations -->
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-3xl p-8 shadow-sm">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-3">
+                            <i class="fa-solid fa-heart-pulse text-rose-400"></i> Multi-Generational Tips
+                        </h3>
+                        <ul class="space-y-4 text-sm text-slate-300">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check text-sky-400 mt-1"></i>
+                                <span><strong>Pacing for Seniors:</strong> Limit continuous driving blocks to 2 hours maximum before a comfort/stretch stop. Ensure ground-floor or elevator accommodations.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check text-sky-400 mt-1"></i>
+                                <span><strong>Teen Engagement:</strong> Interactive boat tours, puffins in Elliston, and coastal photography keep teens energized and off screens.</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-check text-sky-400 mt-1"></i>
+                                <span><strong>Group Vehicles:</strong> With 8 people, splitting into 2 mid-sized SUVs provides comfortable seating across our family group.</span>
+                            </li>
+                        </ul>
+                        <div class="mt-8 pt-6 border-t border-slate-700">
+                            <button @click="activeTab = 'suv-plan'" class="w-full bg-sky-500 hover:bg-sky-400 text-white font-semibold py-3 px-4 rounded-xl transition shadow-lg shadow-sky-500/20 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-car-side"></i> View Flight & SUV Plan
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                        <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-emerald-500"></i> Safety & Medical Note
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Newfoundland has excellent regional medical clinics and hospitals in major hubs (Corner Brook, Gander, Clarenville, St. John's), but remote coastal areas can be isolated. Always travel with a stocked first-aid kit and senior prescription backups.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: ITINERARY -->
+        <div x-show="activeTab === 'itinerary'" x-transition.opacity.duration.300ms class="space-y-6">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">14-Day Family Itinerary (Optimized for 8 Travelers)</h2>
+                        <p class="text-slate-500 text-sm mt-1">Balanced daily driving times and senior-friendly activity options.</p>
+                    </div>
+                    <span class="px-4 py-1.5 rounded-full bg-sky-50 text-sky-600 font-semibold text-xs border border-sky-200">
+                        <i class="fa-solid fa-calendar"></i> 2-Week Plan
+                    </span>
+                </div>
+
+                <div class="space-y-6">
+                    <!-- Day 1-2 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 1 - 2</span>
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Nova Scotia ➔ Port aux Basques Ferry ➔ Rocky Harbour</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Crossing the Cabot Strait</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Board the Marine Atlantic ferry with reserved passenger cabins for the seniors' comfort. Arrive in Port aux Basques and drive ~3.5 hours along the stunning gulf coast to Gros Morne National Park. Settle into our accommodations.
+                        </p>
+                    </div>
+
+                    <!-- Day 3-5 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 3 - 5</span>
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Gros Morne National Park</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Fjords & Tablelands</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Take the Western Brook Pond boat tour (gentle walk, highly accessible for seniors and exciting for teens). Explore the Mars-like Tablelands with interpretive guides. Relaxed evenings enjoying local fish and chips.
+                        </p>
+                    </div>
+
+                    <!-- Day 6-7 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 6 - 7</span>
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Twillingate</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Icebergs & Coastal Outports</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Scenic drive across central Newfoundland (~4.5 hrs with rest stops). Visit Long Point Lighthouse, scout for icebergs, and visit the local craft shops.
+                        </p>
+                    </div>
+
+                    <!-- Day 8-10 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 8 - 10</span>
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Bonavista Peninsula & Trinity</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">Puffins & Historic Trinity</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Head to Elliston for the easiest puffin viewing in North America (short, flat walk suitable for seniors). Explore historic Trinity and enjoy a coastal whale-watching boat tour.
+                        </p>
+                    </div>
+
+                    <!-- Day 11-14 -->
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 11 - 14</span>
+                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> St. John’s & Cape Spear</span>
+                        </div>
+                        <h4 class="text-lg font-bold text-slate-900 mb-2">The Capital City & Celebration</h4>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Discover Jellybean Row houses, Signal Hill (accessible by car for seniors), Cape Spear sunrise, and a celebratory seafood dinner for all 8 family members before heading home.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: FLIGHT & SUV PLAN -->
+        <div x-show="activeTab === 'suv-plan'" x-transition.opacity.duration.300ms class="space-y-10">
+            <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-100 max-w-4xl mx-auto space-y-8">
+                
+                <div class="text-center space-y-3">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase bg-sky-50 text-sky-600 border border-sky-200">
+                        <i class="fa-solid fa-plane-departure"></i> Flight & Vehicle Plan (August 22 – September 5, 2027)
+                    </span>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Newfoundland Flight & SUV Rental Plan</h2>
+                    <p class="text-slate-600 text-base max-w-2xl mx-auto">
+                        Travel details, flight route, trip dates, and vehicle assignments for our 8 family members.
+                    </p>
+                </div>
+
+                <!-- Flight & Trip Details Card -->
+                <div class="bg-gradient-to-r from-sky-900 to-slate-900 text-white rounded-3xl p-8 shadow-xl space-y-6">
+                    <h3 class="text-xl font-bold flex items-center gap-3 text-sky-400">
+                        <i class="fa-solid fa-plane"></i> Flight & Schedule Summary
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2 text-sm">
+                        <div class="bg-slate-800/80 p-5 rounded-2xl space-y-2 border border-slate-700">
+                            <span class="text-xs text-sky-300 font-semibold uppercase tracking-wider">Flight Route</span>
+                            <div class="text-slate-200 font-bold text-base">
+                                Toronto Pearson International Airport (YYZ) ➔ St. John's International Airport (YYT)
+                            </div>
+                            <p class="text-xs text-slate-400">Direct or connecting flights to Newfoundland's capital.</p>
+                        </div>
+
+                        <div class="bg-slate-800/80 p-5 rounded-2xl space-y-2 border border-slate-700">
+                            <span class="text-xs text-sky-300 font-semibold uppercase tracking-wider">Trip Dates (14 Days)</span>
+                            <div class="text-slate-200 font-bold text-base">
+                                Sunday, August 22, 2027 – Sunday, September 5, 2027
+                            </div>
+                            <p class="text-xs text-slate-400">Late summer climate, ideal for coastal exploration.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUV Assignments -->
+                <div class="space-y-6">
+                    <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-car-side text-sky-600"></i> SUV Rental & Passenger Assignments (2 Mid-sized SUVs)
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- SUV 1 -->
+                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200/80 space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                                <h4 class="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-xl bg-sky-600 text-white flex items-center justify-center text-sm">1</span> SUV #1
+                                </h4>
+                                <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-700 font-bold text-xs">Mid-sized SUV</span>
+                            </div>
+
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-id-card text-sky-500 mr-2"></i> Primary Driver:</span>
+                                    <span class="font-bold text-slate-900">Jordan</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-id-card-clip text-sky-500 mr-2"></i> Secondary Driver:</span>
+                                    <span class="font-bold text-slate-900">Michelle</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-100 space-y-1">
+                                    <span class="text-slate-500 font-medium block text-xs uppercase tracking-wider"><i class="fa-solid fa-users text-sky-500 mr-2"></i> Passengers:</span>
+                                    <div class="font-bold text-slate-900 pl-6">Dave & Jerrie</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SUV 2 -->
+                        <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200/80 space-y-4 shadow-sm">
+                            <div class="flex items-center justify-between pb-3 border-b border-slate-200">
+                                <h4 class="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                                    <span class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm">2</span> SUV #2
+                                </h4>
+                                <span class="px-3 py-1 rounded-full bg-teal-100 text-teal-700 font-bold text-xs">Mid-sized SUV</span>
+                            </div>
+
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-id-card text-teal-500 mr-2"></i> Primary Driver:</span>
+                                    <span class="font-bold text-slate-900">Randy</span>
+                                </div>
+                                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-100">
+                                    <span class="text-slate-500 font-medium"><i class="fa-solid fa-id-card-clip text-teal-500 mr-2"></i> Secondary Driver:</span>
+                                    <span class="font-bold text-slate-900">Krystal</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-100 space-y-1">
+                                    <span class="text-slate-500 font-medium block text-xs uppercase tracking-wider"><i class="fa-solid fa-users text-teal-500 mr-2"></i> Passengers:</span>
+                                    <div class="font-bold text-slate-900 pl-6">Mikayla & Maddie</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logistics & Comfort Note -->
+                <div class="bg-sky-50 border border-sky-200/80 rounded-3xl p-6 sm:p-8 space-y-3">
+                    <h4 class="font-bold text-slate-900 flex items-center gap-2 text-base">
+                        <i class="fa-solid fa-circle-info text-sky-600"></i> Why Flying & Renting Mid-Sized SUVs is Ideal for Our Group
+                    </h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Flying from Toronto Pearson to St. John's eliminates over a week of grueling multi-day driving and ferry transits, ensuring our seniors and teenagers arrive refreshed. Renting two mid-sized SUVs gives us nimble, comfortable transportation to navigate scenic coastal outports, national parks, and historic sites with ease.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 5: PACKING LIST -->
+        <div x-show="activeTab === 'packing'" x-transition.opacity.duration.300ms class="space-y-8">
+            <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-100 max-w-4xl mx-auto">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Comprehensive Family Packing List</h2>
+                        <p class="text-slate-500 text-sm mt-1">Tailored for 4 adults, 2 teenagers, and 2 seniors. Saved locally on your device.</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-2xl font-bold text-sky-600" x-text="completedPackingCount + '/' + packingItems.length"></span>
+                        <span class="block text-xs text-slate-400 uppercase tracking-wider font-semibold">Items Packed</span>
+                    </div>
+                </div>
+
+                <!-- Packing Progress Bar -->
+                <div class="w-full bg-slate-100 rounded-full h-3 mb-8 overflow-hidden">
+                    <div class="bg-sky-500 h-3 rounded-full transition-all duration-300" :style="'width: ' + packingProgress + '%'"></div>
+                </div>
+
+                <!-- Category Lists -->
+                <div class="space-y-8">
+                    <!-- Clothing & Outerwear -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-shirt text-sky-500"></i> Clothing & Outerwear (Layers for Coastal Weather)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="(item, idx) in packingItems.filter(i => i.category === 'clothing')" :key="item.id">
+                                <label :class="item.checked ? 'bg-sky-50/60 border-sky-200 text-slate-500 line-through' : 'bg-slate-50 border-slate-100 text-slate-800'" class="flex items-center gap-3 p-3.5 rounded-xl border transition cursor-pointer">
+                                    <input type="checkbox" x-model="item.checked" @change="savePacking" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                                    <span class="text-sm font-medium" x-text="item.name"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Senior Comfort & Mobility -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-person-walking text-amber-500"></i> Senior Comfort & Mobility Gear
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="(item, idx) in packingItems.filter(i => i.category === 'senior')" :key="item.id">
+                                <label :class="item.checked ? 'bg-sky-50/60 border-sky-200 text-slate-500 line-through' : 'bg-slate-50 border-slate-100 text-slate-800'" class="flex items-center gap-3 p-3.5 rounded-xl border transition cursor-pointer">
+                                    <input type="checkbox" x-model="item.checked" @change="savePacking" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                                    <span class="text-sm font-medium" x-text="item.name"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Teen & Tech Gear -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-headphones text-indigo-500"></i> Teen & Tech Essentials
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="(item, idx) in packingItems.filter(i => i.category === 'teen')" :key="item.id">
+                                <label :class="item.checked ? 'bg-sky-50/60 border-sky-200 text-slate-500 line-through' : 'bg-slate-50 border-slate-100 text-slate-800'" class="flex items-center gap-3 p-3.5 rounded-xl border transition cursor-pointer">
+                                    <input type="checkbox" x-model="item.checked" @change="savePacking" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                                    <span class="text-sm font-medium" x-text="item.name"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Outdoor & Hiking Gear -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-boots text-emerald-500"></i> Outdoor, Hiking & Wildlife Gear
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="(item, idx) in packingItems.filter(i => i.category === 'outdoor')" :key="item.id">
+                                <label :class="item.checked ? 'bg-sky-50/60 border-sky-200 text-slate-500 line-through' : 'bg-slate-50 border-slate-100 text-slate-800'" class="flex items-center gap-3 p-3.5 rounded-xl border transition cursor-pointer">
+                                    <input type="checkbox" x-model="item.checked" @change="savePacking" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                                    <span class="text-sm font-medium" x-text="item.name"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Health, First Aid & Documents -->
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-kit-medical text-rose-500"></i> Health, First Aid & Travel Docs
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <template x-for="(item, idx) in packingItems.filter(i => i.category === 'health')" :key="item.id">
+                                <label :class="item.checked ? 'bg-sky-50/60 border-sky-200 text-slate-500 line-through' : 'bg-slate-50 border-slate-100 text-slate-800'" class="flex items-center gap-3 p-3.5 rounded-xl border transition cursor-pointer">
+                                    <input type="checkbox" x-model="item.checked" @change="savePacking" class="w-4 h-4 text-sky-600 rounded border-slate-300 focus:ring-sky-500">
+                                    <span class="text-sm font-medium" x-text="item.name"></span>
+                                </label>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center">
+                    <button @click="resetPacking" class="text-xs text-slate-400 hover:text-rose-600 font-medium transition">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Reset Checklist
+                    </button>
+                    <span class="text-xs text-slate-400">Changes are saved automatically</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: AI TRIP ASSISTANT -->
+        <div x-show="activeTab === 'ai-chat'" x-transition.opacity.duration.300ms class="space-y-6 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 flex flex-col h-[700px]">
+                <div class="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl shadow-sm">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Newfoundland Trip AI Assistant</h2>
+                            <p class="text-xs text-slate-500">Ask anything about flights, itinerary, SUV assignments, or travel tips.</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 font-bold text-xs border border-emerald-200 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Online
+                    </span>
+                </div>
+
+                <!-- Chat Messages Area -->
+                <div class="flex-grow overflow-y-auto space-y-4 pr-2 mb-4" id="chat-container">
+                    <template x-for="msg in chatMessages" :key="msg.id">
+                        <div :class="msg.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+                            <div :class="msg.role === 'user' ? 'bg-sky-600 text-white rounded-2xl rounded-tr-none' : 'bg-slate-100 text-slate-800 rounded-2xl rounded-tl-none'" class="max-w-[80%] p-4 text-sm leading-relaxed shadow-sm">
+                                <span class="block text-[10px] font-bold uppercase tracking-wider mb-1 opacity-75" x-text="msg.role === 'user' ? 'You' : 'AI Assistant'"></span>
+                                <p x-text="msg.text"></p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Chat Input Form -->
+                <form @submit.prevent="sendChat" class="flex gap-3 pt-4 border-t border-slate-100">
+                    <input type="text" x-model="userMessage" placeholder="Ask a question (e.g., 'Who is in SUV #2?' or 'When are we flying?')..." class="flex-grow px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm">
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-md flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-paper-plane"></i> Send
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- TAB 6: FAMILY COMMENTS & NOTES -->
+        <div x-show="activeTab === 'comments'" x-transition.opacity.duration.300ms class="space-y-8 max-w-4xl mx-auto">
+            <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-100 space-y-8">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Family Comments & Suggestions</h2>
+                        <p class="text-slate-500 text-sm mt-1">Leave notes, ideas, or edit requests for the trip organizer.</p>
+                    </div>
+                    <span class="px-4 py-1.5 rounded-full bg-sky-50 text-sky-600 font-semibold text-xs border border-sky-200">
+                        <i class="fa-solid fa-comment-dots"></i> <span x-text="comments.length"></span> Notes
+                    </span>
+                </div>
+
+                <!-- Add Comment Form -->
+                <form @submit.prevent="addComment" class="bg-slate-50 p-6 rounded-3xl border border-slate-200/60 space-y-4">
+                    <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-pen-to-square text-sky-600"></i> Leave a Note for the Organizer
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Your Name</label>
+                            <input type="text" x-model="newComment.name" required placeholder="e.g. Jordan, Michelle..." class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Category</label>
+                            <select x-model="newComment.category" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white">
+                                <option value="Itinerary">Itinerary</option>
+                                <option value="Flights & SUVs">Flights & SUVs</option>
+                                <option value="Packing List">Packing List</option>
+                                <option value="General">General</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">Your Comment / Edit Request</label>
+                        <textarea x-model="newComment.text" required rows="3" placeholder="What would you like to suggest or change?" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-sm bg-white"></textarea>
+                    </div>
+                    <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-6 py-3 rounded-xl transition shadow-md text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Note
+                    </button>
+                </form>
+
+                <!-- Comments List -->
+                <div class="space-y-4">
+                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider">Submitted Family Notes</h3>
+                    <template x-for="(comm, idx) in comments" :key="comm.id">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 space-y-2 relative group">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-900 text-sm" x-text="comm.name"></span>
+                                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-sky-100 text-sky-700" x-text="comm.category"></span>
+                                </div>
+                                <span class="text-xs text-slate-400" x-text="comm.date"></span>
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed" x-text="comm.text"></p>
+                            <button @click="deleteComment(comm.id)" class="absolute top-4 right-4 text-slate-400 hover:text-rose-600 opacity-0 group-hover:opacity-100 transition text-xs">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </template>
+                    <p x-show="comments.length === 0" class="text-center text-slate-400 py-8 text-sm italic">
+                        No comments yet. Be the first to leave a note or suggestion!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-10 mt-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+            <p class="text-sm font-medium text-slate-300">Newfoundland Family Adventure 2027 — 8 Travelers (4 Adults, 2 Teens, 2 Seniors)</p>
+            <p class="text-xs text-slate-500">Built with love for our multi-generational family trip planning.</p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Application Logic -->
+    <script>
+        function tripApp() {
+            return {
+                activeTab: 'overview',
+                isLoggedIn: sessionStorage.getItem('nfld_unlocked') === 'true',
+                passcode: '',
+                loginError: false,
+                login() {
+                    if (this.passcode === 'newfoundland2027') {
+                        this.isLoggedIn = true;
+                        sessionStorage.setItem('nfld_unlocked', 'true');
+                        this.loginError = false;
+                    } else {
+                        this.loginError = true;
+                    }
+                },
+                chatMessages: [
+                    { id: 1, role: 'assistant', text: 'Hello! I am your Newfoundland trip assistant. Ask me anything about the trip, or tell me how awesome I am!' }
+                ],
+                userMessage: '',
+                sendChat() {
+                    if (!this.userMessage.trim()) return;
+                    const txt = this.userMessage.trim();
+                    this.chatMessages.push({ id: Date.now(), role: 'user', text: txt });
+                    this.userMessage = '';
+
+                    setTimeout(() => {
+                        let reply = "That's a great question about our Newfoundland trip! For specific changes or updates, feel free to leave a note in the 'Family Comments & Notes' tab so the trip organizer can update the page.";
+                        const lower = txt.toLowerCase();
+
+                        if (lower.includes('awesome') || lower.includes('great') || lower.includes('best') || lower.includes('amazing') || lower.includes('love')) {
+                            reply = "Aw, thank you so much! I do my best to make sure this Newfoundland trip is legendary for everyone!";
+                        } else if (lower.includes('flight') || lower.includes('airport') || lower.includes('toronto') || lower.includes('st. john')) {
+                            reply = "We are flying from Toronto Pearson International Airport (YYZ) to St. John's International Airport (YYT), Newfoundland, from Sunday August 22, 2027 until Sunday September 5, 2027.";
+                        } else if (lower.includes('suv') || lower.includes('car') || lower.includes('driver') || lower.includes('passenger') || lower.includes('jordan') || lower.includes('randy')) {
+                            reply = "We are renting 2 mid-sized SUVs! SUV #1: Primary Driver Jordan, Secondary Driver Michelle, Passengers Dave & Jerrie. SUV #2: Primary Driver Randy, Secondary Driver Krystal, Passengers Mikayla & Maddie.";
+                        } else if (lower.includes('date') || lower.includes('when') || lower.includes('duration')) {
+                            reply = "Our trip runs for 14 days: from Sunday, August 22, 2027 until Sunday, September 5, 2027.";
+                        } else if (lower.includes('pack') || lower.includes('bring')) {
+                            reply = "Check out our 'Detailed Packing List' tab for waterproof Gore-Tex rain jackets, hiking boots, binoculars, and senior comfort gear!";
+                        } else if (lower.includes('gros morne') || lower.includes('twillingate') || lower.includes('bonavista')) {
+                            reply = "Our 14-day itinerary covers Gros Morne National Park, Twillingate (Iceberg Alley), Bonavista Peninsula, Trinity, and St. John's & Cape Spear!";
+                        }
+
+                        this.chatMessages.push({ id: Date.now() + 1, role: 'assistant', text: reply });
+                    }, 500);
+                },
+                comments: JSON.parse(localStorage.getItem('nfld_comments')) || [],
+                newComment: { name: '', category: 'General', text: '' },
+                addComment() {
+                    if (!this.newComment.name || !this.newComment.text) return;
+                    this.comments.unshift({
+                        id: Date.now(),
+                        name: this.newComment.name,
+                        category: this.newComment.category,
+                        text: this.newComment.text,
+                        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                    });
+                    localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                    this.newComment.name = '';
+                    this.newComment.text = '';
+                },
+                deleteComment(id) {
+                    this.comments = this.comments.filter(c => c.id !== id);
+                    localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                },
+                packingItems: JSON.parse(localStorage.getItem('nfld_packing_8p')) || [
+                    // Clothing
+                    { id: 1, name: 'Waterproof Gore-Tex Rain Jackets (All 8)', category: 'clothing', checked: false },
+                    { id: 2, name: 'Thermal Base Layers / Long Underwear', category: 'clothing', checked: false },
+                    { id: 3, name: 'Warm Fleece & Wool Sweaters (Cool evenings)', category: 'clothing', checked: false },
+                    { id: 4, name: 'Quick-Dry Hiking Pants & Casual Jeans', category: 'clothing', checked: false },
+                    { id: 5, name: 'Warm Hats, Gloves & Scarves (Coastal winds)', category: 'clothing', checked: false },
+                    { id: 6, name: 'Wool / Moisture-Wicking Socks (Multiple pairs)', category: 'clothing', checked: false },
+                    
+                    // Senior Comfort
+                    { id: 7, name: 'Telescopic Walking Poles / Hiking Sticks (for Seniors)', category: 'senior', checked: false },
+                    { id: 8, name: 'Ergonomic Seat Cushions / Car Back Supports', category: 'senior', checked: false },
+                    { id: 9, name: 'Reading Glasses & Spare Pairs', category: 'senior', checked: false },
+                    { id: 10, name: 'Compression Socks (for Ferry & Long Drives)', category: 'senior', checked: false },
+
+                    // Teen & Tech
+                    { id: 11, name: 'Multi-port USB Car Chargers & Power Banks', category: 'teen', checked: false },
+                    { id: 12, name: 'Headphones / Earbuds for Travel', category: 'teen', checked: false },
+                    { id: 13, name: 'Downloaded Offline Playlists & Movies', category: 'teen', checked: false },
+                    { id: 14, name: 'Reusable Insulated Water Bottles (8x)', category: 'teen', checked: false },
+
+                    // Outdoor & Hiking
+                    { id: 15, name: 'Sturdy Waterproof Hiking Boots (Broken in)', category: 'outdoor', checked: false },
+                    { id: 16, name: 'High-Quality Binoculars (Whales & Puffins)', category: 'outdoor', checked: false },
+                    { id: 17, name: 'Daypacks for Hikes (Water, Snacks, Layers)', category: 'outdoor', checked: false },
+                    { id: 18, name: 'Mosquito Repellent & Bug Headnets', category: 'outdoor', checked: false },
+
+                    // Health & Docs
+                    { id: 19, name: 'Prescription Medications (Extra 1-week supply)', category: 'health', checked: false },
+                    { id: 20, name: 'Motion Sickness Pills (Travel & Flights)', category: 'health', checked: false },
+                    { id: 21, name: 'Comprehensive Family First-Aid Kit', category: 'health', checked: false },
+                    { id: 22, name: 'Driver’s Licenses, Insurance & Flight/Car Bookings', category: 'health', checked: true }
+                ],
+
+                savePacking() {
+                    localStorage.setItem('nfld_packing_8p', JSON.stringify(this.packingItems));
+                },
+
+                resetPacking() {
+                    this.packingItems.forEach(i => i.checked = false);
+                    this.savePacking();
+                },
+
+                get completedPackingCount() {
+                    return this.packingItems.filter(i => i.checked).length;
+                },
+
+                get packingProgress() {
+                    if (this.packingItems.length === 0) return 0;
+                    return Math.round((this.completedPackingCount / this.packingItems.length) * 100);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
