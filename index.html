@@ -687,13 +687,15 @@
         function tripApp() {
             return {
                 activeTab: 'overview',
-                isLoggedIn: sessionStorage.getItem('nfld_unlocked') === 'true',
+                isLoggedIn: (() => {
+                    try { return sessionStorage.getItem('nfld_unlocked') === 'true'; } catch(e) { return false; }
+                })(),
                 passcode: '',
                 loginError: false,
                 login() {
                     if (this.passcode === 'newfoundland2027') {
                         this.isLoggedIn = true;
-                        sessionStorage.setItem('nfld_unlocked', 'true');
+                        try { sessionStorage.setItem('nfld_unlocked', 'true'); } catch(e) {}
                         this.loginError = false;
                     } else {
                         this.loginError = true;
@@ -730,7 +732,14 @@
                         this.chatMessages.push({ id: Date.now() + 1, role: 'assistant', text: reply });
                     }, 500);
                 },
-                comments: JSON.parse(localStorage.getItem('nfld_comments')) || [],
+                comments: (() => {
+                    try {
+                        const saved = localStorage.getItem('nfld_comments');
+                        return saved ? JSON.parse(saved) : [];
+                    } catch (e) {
+                        return [];
+                    }
+                })(),
                 newComment: { name: '', category: 'General', text: '' },
                 addComment() {
                     if (!this.newComment.name || !this.newComment.text) return;
@@ -741,50 +750,62 @@
                         text: this.newComment.text,
                         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                     });
-                    localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                    try {
+                        localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                    } catch (e) {}
                     this.newComment.name = '';
                     this.newComment.text = '';
                 },
                 deleteComment(id) {
                     this.comments = this.comments.filter(c => c.id !== id);
-                    localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                    try {
+                        localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
+                    } catch (e) {}
                 },
-                packingItems: JSON.parse(localStorage.getItem('nfld_packing_8p')) || [
-                    // Clothing
-                    { id: 1, name: 'Waterproof Gore-Tex Rain Jackets (All 8)', category: 'clothing', checked: false },
-                    { id: 2, name: 'Thermal Base Layers / Long Underwear', category: 'clothing', checked: false },
-                    { id: 3, name: 'Warm Fleece & Wool Sweaters (Cool evenings)', category: 'clothing', checked: false },
-                    { id: 4, name: 'Quick-Dry Hiking Pants & Casual Jeans', category: 'clothing', checked: false },
-                    { id: 5, name: 'Warm Hats, Gloves & Scarves (Coastal winds)', category: 'clothing', checked: false },
-                    { id: 6, name: 'Wool / Moisture-Wicking Socks (Multiple pairs)', category: 'clothing', checked: false },
-                    
-                    // Senior Comfort
-                    { id: 7, name: 'Telescopic Walking Poles / Hiking Sticks (for Seniors)', category: 'senior', checked: false },
-                    { id: 8, name: 'Ergonomic Seat Cushions / Car Back Supports', category: 'senior', checked: false },
-                    { id: 9, name: 'Reading Glasses & Spare Pairs', category: 'senior', checked: false },
-                    { id: 10, name: 'Compression Socks (for Ferry & Long Drives)', category: 'senior', checked: false },
+                packingItems: (() => {
+                    try {
+                        const saved = localStorage.getItem('nfld_packing_8p');
+                        if (saved) return JSON.parse(saved);
+                    } catch (e) {}
+                    return [
+                        // Clothing
+                        { id: 1, name: 'Waterproof Gore-Tex Rain Jackets (All 8)', category: 'clothing', checked: false },
+                        { id: 2, name: 'Thermal Base Layers / Long Underwear', category: 'clothing', checked: false },
+                        { id: 3, name: 'Warm Fleece & Wool Sweaters (Cool evenings)', category: 'clothing', checked: false },
+                        { id: 4, name: 'Quick-Dry Hiking Pants & Casual Jeans', category: 'clothing', checked: false },
+                        { id: 5, name: 'Warm Hats, Gloves & Scarves (Coastal winds)', category: 'clothing', checked: false },
+                        { id: 6, name: 'Wool / Moisture-Wicking Socks (Multiple pairs)', category: 'clothing', checked: false },
+                        
+                        // Senior Comfort
+                        { id: 7, name: 'Telescopic Walking Poles / Hiking Sticks (for Seniors)', category: 'senior', checked: false },
+                        { id: 8, name: 'Ergonomic Seat Cushions / Car Back Supports', category: 'senior', checked: false },
+                        { id: 9, name: 'Reading Glasses & Spare Pairs', category: 'senior', checked: false },
+                        { id: 10, name: 'Compression Socks (for Ferry & Long Drives)', category: 'senior', checked: false },
 
-                    // Teen & Tech
-                    { id: 11, name: 'Multi-port USB Car Chargers & Power Banks', category: 'teen', checked: false },
-                    { id: 12, name: 'Headphones / Earbuds for Travel', category: 'teen', checked: false },
-                    { id: 13, name: 'Downloaded Offline Playlists & Movies', category: 'teen', checked: false },
-                    { id: 14, name: 'Reusable Insulated Water Bottles (8x)', category: 'teen', checked: false },
+                        // Teen & Tech
+                        { id: 11, name: 'Multi-port USB Car Chargers & Power Banks', category: 'teen', checked: false },
+                        { id: 12, name: 'Headphones / Earbuds for Travel', category: 'teen', checked: false },
+                        { id: 13, name: 'Downloaded Offline Playlists & Movies', category: 'teen', checked: false },
+                        { id: 14, name: 'Reusable Insulated Water Bottles (8x)', category: 'teen', checked: false },
 
-                    // Outdoor & Hiking
-                    { id: 15, name: 'Sturdy Waterproof Hiking Boots (Broken in)', category: 'outdoor', checked: false },
-                    { id: 16, name: 'High-Quality Binoculars (Whales & Puffins)', category: 'outdoor', checked: false },
-                    { id: 17, name: 'Daypacks for Hikes (Water, Snacks, Layers)', category: 'outdoor', checked: false },
-                    { id: 18, name: 'Mosquito Repellent & Bug Headnets', category: 'outdoor', checked: false },
+                        // Outdoor & Hiking
+                        { id: 15, name: 'Sturdy Waterproof Hiking Boots (Broken in)', category: 'outdoor', checked: false },
+                        { id: 16, name: 'High-Quality Binoculars (Whales & Puffins)', category: 'outdoor', checked: false },
+                        { id: 17, name: 'Daypacks for Hikes (Water, Snacks, Layers)', category: 'outdoor', checked: false },
+                        { id: 18, name: 'Mosquito Repellent & Bug Headnets', category: 'outdoor', checked: false },
 
-                    // Health & Docs
-                    { id: 19, name: 'Prescription Medications (Extra 1-week supply)', category: 'health', checked: false },
-                    { id: 20, name: 'Motion Sickness Pills (Travel & Flights)', category: 'health', checked: false },
-                    { id: 21, name: 'Comprehensive Family First-Aid Kit', category: 'health', checked: false },
-                    { id: 22, name: 'Driver’s Licenses, Insurance & Flight/Car Bookings', category: 'health', checked: true }
-                ],
+                        // Health & Docs
+                        { id: 19, name: 'Prescription Medications (Extra 1-week supply)', category: 'health', checked: false },
+                        { id: 20, name: 'Motion Sickness Pills (Travel & Flights)', category: 'health', checked: false },
+                        { id: 21, name: 'Comprehensive Family First-Aid Kit', category: 'health', checked: false },
+                        { id: 22, name: 'Driver’s Licenses, Insurance & Flight/Car Bookings', category: 'health', checked: true }
+                    ];
+                })(),
 
                 savePacking() {
-                    localStorage.setItem('nfld_packing_8p', JSON.stringify(this.packingItems));
+                    try {
+                        localStorage.setItem('nfld_packing_8p', JSON.stringify(this.packingItems));
+                    } catch (e) {}
                 },
 
                 resetPacking() {
