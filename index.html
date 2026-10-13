@@ -667,7 +667,7 @@
                     this.userMessage = '';
 
                     setTimeout(() => {
-                        let reply = "That's a great question about our Newfoundland trip! For specific changes or updates, feel free to leave a note in the 'Family Comments & Notes' tab so the trip organizer can update the page.";
+                        let reply = "That's a great question about our Newfoundland trip!";
                         const lower = txt.toLowerCase();
 
                         if (lower.includes('awesome') || lower.includes('great') || lower.includes('best') || lower.includes('amazing') || lower.includes('love')) {
@@ -682,6 +682,32 @@
                             reply = "Check out our 'Detailed Packing List' tab for waterproof Gore-Tex rain jackets, hiking boots, binoculars, and senior comfort gear!";
                         } else if (lower.includes('gros morne') || lower.includes('twillingate') || lower.includes('bonavista')) {
                             reply = "Our 14-day itinerary covers Gros Morne National Park, Twillingate (Iceberg Alley), Bonavista Peninsula, Trinity, and St. John's & Cape Spear!";
+                        } else if (lower.includes('hiking') || lower.includes('hike') || lower.includes('trail')) {
+                            reply = "Newfoundland offers excellent hiking! Gros Morne has the Tablelands and Western Brook Pond trails, Twillingate has coastal outport walks, and Bonavista has heritage lighthouse trails. All have varying difficulty levels suitable for our multi-generational group.";
+                        } else if (lower.includes('whale') || lower.includes('puffin') || lower.includes('bird') || lower.includes('wildlife')) {
+                            reply = "Newfoundland is fantastic for wildlife! You can see humpback whales and dolphins on boat tours from Bonavista and Trinity, puffins at Elliston (known as the 'puffin capital of North America'), and icebergs in Twillingate during summer months.";
+                        } else if (lower.includes('elliott') || lower.includes('elliston')) {
+                            reply = "Elliston is known as the puffin capital of North America! It has easy, flat walks suitable for seniors that offer excellent puffin viewing, especially between May and August. It's a highlight for many visitors.";
+                        } else if (lower.includes('elliott') || lower.includes('elliston')) {
+                            reply = "Elliston is known as the puffin capital of North America! It has easy, flat walks suitable for seniors that offer excellent puffin viewing, especially between May and August. It's a highlight for many visitors.";
+                        } else if (lower.includes('iceberg') || lower.includes('ice')) {
+                            reply = "Icebergs! Newfoundland is famous for iceberg viewing, especially in Twillingate and along the northeast coast. These 'iceberg alley' sightings typically occur from May to July. Twillingate has become known as the iceberg capital of North America.";
+                        } else if (lower.includes('ferry') || lower.includes('marine atlantic')) {
+                            reply = "We're taking Marine Atlantic ferry from North Sydney, Nova Scotia to Port aux Basques, Newfoundland. The crossing takes 6-7 hours. We've reserved cabins for the seniors' comfort. It's a scenic way to start the island loop adventure.";
+                        } else if (lower.includes('senior') || lower.includes('seniors')) {
+                            reply = "For our seniors (2 in our group of 8), we're focusing on accessible viewpoints, limiting driving blocks to 2 hours maximum, ensuring ground-floor accommodations, and bringing compression socks and ergonomic seat cushions for the ferry and long drives. Many attractions like Elliston's puffin walks and Gros Morne's boardwalks are senior-friendly.";
+                        } else if (lower.includes('teen') || lower.includes('teenager')) {
+                            reply = "For our teens (2 in our group), Newfoundland offers engaging coastal hikes, photography opportunities, puffin watching in Elliston, and boat tours that keep them energized. We're splitting into 2 SUVs for comfort across our 8-person family group.";
+                        } else if (lower.includes('water') || lower.includes('ocean') || lower.includes('sea')) {
+                            reply = "Newfoundland is surrounded by the Atlantic Ocean! You'll experience dramatic coastlines, sea stacks, and offshore islands. Boat tours from many coastal communities offer whale watching, puffin viewing, and iceberg sightseeing. The water is cold even in summer, so our packing list includes waterproof gear.";
+                        } else if (lower.includes('weather') || lower.includes('climate')) {
+                            reply = "Newfoundland weather in late August/early September is typically cool and variable - expect temperatures around 10-20°C (50-68°F), with potential rain and wind. That's why we're packing layers, waterproof Gore-Tex jackets, and warm sweaters. The climate is influenced by the North Atlantic Current.";
+                        } else if (lower.includes('st. john') || lower.includes('st john') || lower.includes('capital')) {
+                            reply = "St. John's is Newfoundland's capital and easternmost city in North America. Highlights include the colorful Jellybean Row houses, Signal Hill (accessible by car for seniors), Cape Spear (the easternmost point), and a vibrant arts and dining scene. We're spending our final days there before heading home.";
+                        } else if (lower.includes('drive') || lower.includes('driving') || lower.includes('route')) {
+                            reply = "We're doing an island loop drive of approximately 1,600 km over 14 days. Key segments include: ferry crossing (6-7 hrs), Port aux Basques to Gros Morne (~3.5 hrs), Gros Morne to Twillingate (~4.5 hrs), Twillingate to Bonavista (~3 hrs), and Bonavista to St. John's (~3.5 hrs). We're splitting into 2 SUVs for comfort and taking ferry cabins for seniors.";
+                        } else {
+                            reply = "That's a great question about our Newfoundland trip! I can help with information about flights, SUV assignments, packing, itinerary details, or specific locations like Gros Morne, Twillingate, Bonavista, and St. John's. What would you like to know?";
                         }
 
                         this.chatMessages.push({ id: Date.now() + 1, role: 'assistant', text: reply });
