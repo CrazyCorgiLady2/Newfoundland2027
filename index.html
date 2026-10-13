@@ -281,138 +281,117 @@
                     </span>
                 </div>
 
-                <!-- Itinerary Photo Strip -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
-                        <div class="h-40 relative overflow-hidden">
-                            <img src="./pictures/gros_morne.webp" alt="Gros Morne National Park Fjord" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        </div>
-                        <div class="p-3 text-center">
-                            <h4 class="font-bold text-slate-900 text-xs">Gros Morne</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">UNESCO World Heritage</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
-                        <div class="h-40 relative overflow-hidden">
-                            <img src="./pictures/bonavista.webp" alt="Bonavista Waterfront" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        </div>
-                        <div class="p-3 text-center">
-                            <h4 class="font-bold text-slate-900 text-xs">Bonavista</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">Historic Coastline</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
-                        <div class="h-40 relative overflow-hidden">
-                            <img src="./pictures/st_johns.webp" alt="St. John's Jellybean Row" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        </div>
-                        <div class="p-3 text-center">
-                            <h4 class="font-bold text-slate-900 text-xs">St. John's</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">Capital City</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
-                        <div class="h-40 relative overflow-hidden">
-                            <img src="./pictures/twilingate.webp" alt="Twillingate Icebergs" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        </div>
-                        <div class="p-3 text-center">
-                            <h4 class="font-bold text-slate-900 text-xs">Twillingate</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">Iceberg Capital</p>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between group hover:shadow-md transition">
-                        <div class="h-40 relative overflow-hidden">
-                            <img src="./pictures/battle_harbour.webp" alt="Battle Harbour Outport" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        </div>
-                        <div class="p-3 text-center">
-                            <h4 class="font-bold text-slate-900 text-xs">Outports</h4>
-                            <p class="text-[10px] text-slate-500 mt-1">Coastal Heritage</p>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="space-y-6">
                     <!-- Day 1-3: St. John's -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 1 - 3</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> St. John's</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 1 - 3</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> St. John's</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Capital City Exploration</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Settle in after your flight from Toronto. Explore the iconic Jellybean Row houses, visit Signal Hill for panoramic views (accessible by car for seniors), and watch the sunset at Cape Spear—the easternmost point in North America. Visit The Rooms museum for Newfoundland heritage, stroll along the Ocean Path, and enjoy fresh seafood at local restaurants with senior-friendly seating.
+                            </p>
+                            <img src="./pictures/st_johns.webp" alt="St. John's Jellybean Row waterfront" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Capital City Exploration</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Settle in after your flight from Toronto. Explore the iconic Jellybean Row houses, visit Signal Hill for panoramic views (accessible by car for seniors), and watch the sunset at Cape Spear—the easternmost point in North America. Visit The Rooms museum for Newfoundland heritage, stroll along the Ocean Path, and enjoy fresh seafood at local restaurants with senior-friendly seating.
-                        </p>
                     </div>
 
                     <!-- Day 4: Bonavista -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 4</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Bonavista</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 4</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Bonavista</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Historic Coastline & Puffins</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Drive along the scenic coast to Bonavista (approx 3.5 hours from St. John's). Visit the historic Cape Bonavista Lighthouse, one of Newfoundland's most photographed landmarks. Take a short drive to Elliston—the "Puffin Capital of North America"—for easy, flat walks suitable for seniors that offer excellent puffin viewing between May and August. Explore the charming harbour, seafood restaurants, and marine interpretation centre.
+                            </p>
+                            <img src="./pictures/bonavista.webp" alt="Bonavista coastline and lighthouse" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Historic Coastline & Puffins</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Drive along the scenic coast to Bonavista (approx 3.5 hours from St. John's). Visit the historic Cape Bonavista Lighthouse, one of Newfoundland's most photographed landmarks. Take a short drive to Elliston—the "Puffin Capital of North America"—for easy, flat walks suitable for seniors that offer excellent puffin viewing between May and August. Explore the charming harbour, seafood restaurants, and marine interpretation centre.
-                        </p>
                     </div>
 
                     <!-- Day 5: Gander -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 5</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Gander</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 5</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Gander</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Aviation Heritage</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Continue to Gander (approx 3 hours from Bonavista). Known as the "Crossroads of the Atlantic," Gander played a pivotal role in WWII as a refueling stop for trans-Atlantic flights. Visit the Gander International Aviation Museum to learn about the city's aviation history and the 2001 "Plane Groundings" after 9/11. Explore Gander Lake and experience small-town Newfoundland hospitality.
+                            </p>
+                            <img src="./pictures/st_johns.webp" alt="Gander aviation history" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Aviation Heritage</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Continue to Gander (approx 3 hours from Bonavista). Known as the "Crossroads of the Atlantic," Gander played a pivotal role in WWII as a refueling stop for trans-Atlantic flights. Visit the Gander International Aviation Museum to learn about the city's aviation history and the 2001 "Plane Groundings" after 9/11. Explore Gander Lake and experience small-town Newfoundland hospitality.
-                        </p>
                     </div>
 
                     <!-- Day 6: Lewisporte -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 6</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Lewisporte</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Day 6</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Lewisporte</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Capital of the North</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Travel to Lewisporte (approx 1.5-2 hours from Gander), known as the "Capital of the North." Explore the town's maritime heritage at the local museum, walk along Lewisporte Harbour, and venture into nearby outports of Notre Dame Bay. Enjoy scenic views of the bay, learn about the fishing industry, and experience authentic outport culture away from the main tourist paths.
+                            </p>
+                            <img src="./pictures/battle_harbour.webp" alt="Lewisporte harbour scene" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Capital of the North</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Travel to Lewisporte (approx 1.5-2 hours from Gander), known as the "Capital of the North." Explore the town's maritime heritage at the local museum, walk along Lewisporte Harbour, and venture into nearby outports of Notre Dame Bay. Enjoy scenic views of the bay, learn about the fishing industry, and experience authentic outport culture away from the main tourist paths.
-                        </p>
                     </div>
 
                     <!-- Day 7-9: Twillingate -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 7 - 9</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Twillingate</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 7 - 9</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Twillingate</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Iceberg Capital & Coastal Heritage</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Journey to Twillingate (approx 2 hours from Lewisporte), the "Iceberg Capital of North America." From May to July, witness massive icebergs drifting along "Iceberg Alley" on boat tours or from shore. Visit the Twillingate Museum and Heritage Centre for maritime history, explore the Newfoundland Insectarium, take coastal boat tours for whale watching, and enjoy spectacular coastal outport scenery. The area offers both gentle shoreline walks and more challenging hikes for the active travelers.
+                            </p>
+                            <img src="./pictures/twilingate.webp" alt="Twillingate icebergs coastline" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Iceberg Capital & Coastal Heritage</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Journey to Twillingate (approx 2 hours from Lewisporte), the "Iceberg Capital of North America." From May to July, witness massive icebergs drifting along "Iceberg Alley" on boat tours or from shore. Visit the Twillingate Museum and Heritage Centre for maritime history, explore the Newfoundland Insectarium, take coastal boat tours for whale watching, and enjoy spectacular coastal outport scenery. The area offers both gentle shoreline walks and more challenging hikes for the active travelers.
-                        </p>
                     </div>
 
                     <!-- Day 10-12: Gros Morne -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 10 - 12</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Gros Morne</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 10 - 12</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> Gros Morne</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Fjords, Tablelands & Coastline</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Drive to Gros Morne National Park (approx 4.5 hours from Twillingate via Route 330 and 430), a UNESCO World Heritage Site. Take the famous Western Brook Pond boat tour through glacier-carved fjords (book in advance, gentle walk required). Explore the Mars-like Tablelands with interpretive guides (permits required for certain areas). hike the Green Gardens trail for coastal wilderness experiences. Enjoy coastal drives with whale-viewing opportunities, relax at Western Brook Pond interpretation centre, and savour locally sourced seafood dinners.
+                            </p>
+                            <img src="./pictures/gros_morne.webp" alt="Gros Morne National Park fjords" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Fjords, Tablelands & Coastline</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Drive to Gros Morne National Park (approx 4.5 hours from Twillingate via Route 330 and 430), a UNESCO World Heritage Site. Take the famous Western Brook Pond boat tour through glacier-carved fjords (book in advance, gentle walk required). Explore the Mars-like Tablelands with interpretive guides (permits required for certain areas). hike the Green Gardens trail for coastal wilderness experiences. Enjoy coastal drives with whale-viewing opportunities, relax at Western Brook Pond interpretation centre, and savour locally sourced seafood dinners.
-                        </p>
                     </div>
 
                     <!-- Day 13-15: St. John's -->
-                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-                            <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 13 - 15</span>
-                            <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> St. John's</span>
+                    <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/60 hover:border-sky-300 transition flex flex-col lg:flex-row gap-6 items-start">
+                        <!-- Text content on left -->
+                        <div class="lg:flex-1 space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                                <span class="inline-block px-3 py-1 rounded-lg bg-sky-600 text-white font-bold text-xs uppercase tracking-wide w-fit">Days 13 - 15</span>
+                                <span class="text-xs font-medium text-slate-500"><i class="fa-solid fa-location-dot text-rose-500 mr-1"></i> St. John's</span>
+                            </div>
+                            <h4 class="text-lg font-bold text-slate-900 mb-2">Farewell & Celebration</h4>
+                            <p class="text-slate-600 text-sm leading-relaxed">
+                                Begin the drive back to St. John's (approx 3.5-4 hours from Gros Morne via Route 1). Spend your final hours revisiting favorite spots or discovering new ones—the city is small enough to explore thoroughly. Celebrate the adventure with a farewell seafood dinner featuring the day's catch, explore any last-minute shops on Water Street, visit George Street for live music (teens!), and reflect on the 15-day island loop journey before departure the following morning.
+                            </p>
+                            <img src="./pictures/st_johns.webp" alt="St. John's farewell scene" class="w-full lg:h-64 rounded-lg object-cover lg:object-cover">
                         </div>
-                        <h4 class="text-lg font-bold text-slate-900 mb-2">Farewell & Celebration</h4>
-                        <p class="text-slate-600 text-sm leading-relaxed">
-                            Begin the drive back to St. John's (approx 3.5-4 hours from Gros Morne via Route 1). Spend your final hours revisiting favorite spots or discovering new ones—the city is small enough to explore thoroughly. Celebrate the adventure with a farewell seafood dinner featuring the day's catch, explore any last-minute shops on Water Street, visit George Street for live music (teens!), and reflect on the 15-day island loop journey before departure the following morning.
-                        </p>
                     </div>
                 </div>
             </div>
