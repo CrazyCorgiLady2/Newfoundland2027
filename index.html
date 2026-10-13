@@ -73,9 +73,6 @@
                 <button @click="activeTab = 'ai-chat'" :class="activeTab === 'ai-chat' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
                     <i class="fa-solid fa-robot"></i> AI Trip Assistant
                 </button>
-                <button @click="activeTab = 'comments'" :class="activeTab === 'comments' ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/30 ring-2 ring-sky-400' : 'bg-white/10 hover:bg-white/20 text-slate-200'" class="px-4 sm:px-5 py-2.5 rounded-xl font-medium text-sm transition-all backdrop-blur-md flex items-center gap-2 flex-shrink-0">
-                    <i class="fa-solid fa-comments"></i> Family Comments & Notes
-                </button>
             </div>
         </div>
     </header>
@@ -619,27 +616,7 @@
   </script>
 </details>
 
-<!-- Comments Section -->
-<div class="hidden">
-  <!-- Alpine.js comments fallback (disabled - using Giscus instead) -->
-  <div x-show="activeTab === 'comments'" x-transition.opacity.duration.300ms class="space-y-8 max-w-4xl mx-auto">
-    <div class="bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-slate-100 space-y-8">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h2 class="text-2xl font-bold text-slate-900">Family Comments & Suggestions</h2>
-          <p class="text-slate-500 text-sm mt-1">Comments are now powered by GitHub Discussions. <a href="https://github.com/CrazyCorgiLady2/Newfoundland2027/discussions" target="_blank" class="text-sky-600 font-medium">Visit the Discussion</a></p>
-        </div>
-        <span class="px-4 py-1.5 rounded-full bg-sky-50 text-sky-600 font-semibold text-xs border border-sky-200">
-          <i class="fa-solid fa-comment-dots"></i> <span>Giscus</span> Notes
-        </span>
-      </div>
-      <div class="prose max-w-none">
-        <p>Giscus comments are loaded dynamically above. Enable JavaScript and visit the page to view/discuss.</p>
-      </div>
-    </div>
-  </div>
 </div>
-
     </main>
 
     <!-- Footer -->
@@ -772,15 +749,5 @@
             }
         }
     </script>
-<!-- Giscus Comments -->
-<script src="https://giscus.app/client.js"
-        data-repo="CrazyCorgiLady2/Newfoundland2027"
-        data-category="General"
-        data-discussion-title="Newfoundland Trip Comments"
-        data-starter-mode="true"
-        data-reactions-enabled="1"
-        data-mapping="pathname"
-        data-lang="en">
-</script>
 </body>
 </html>
