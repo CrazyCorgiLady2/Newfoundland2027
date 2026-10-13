@@ -684,6 +684,16 @@
 
     <!-- Alpine.js Application Logic -->
     <script>
+        // ==== GITHUB ISSUES CONFIGURATION ====
+        // To enable cloud saving, set these values (get a token at github.com/settings/tokens):
+        // 1. Generate a token at github.com/settings/tokens with 'repo' scope
+        // 2. Set GITHUB_OWNER to your username and GITHUB_REPO to your repo name
+        // 3. Set GITHUB_TOKEN to the generated token
+        const GITHUB_OWNER = 'CrazyCorgiLady2';
+        const GITHUB_REPO = 'Newfoundland2027';
+        const GITHUB_TOKEN = 'YOUR_GITHUB_PERSONAL_TOKEN_HERE'; // <-- REPLACE THIS with your token
+        // =======================================
+
         function tripApp() {
             return {
                 activeTab: 'overview',
@@ -743,6 +753,8 @@
                 newComment: { name: '', category: 'General', text: '' },
                 addComment() {
                     if (!this.newComment.name || !this.newComment.text) return;
+                    
+                    // Add to local comments array
                     this.comments.unshift({
                         id: Date.now(),
                         name: this.newComment.name,
@@ -750,11 +762,48 @@
                         text: this.newComment.text,
                         date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
                     });
+                    
+                    // Save to localStorage (fallback if GitHub API fails)
                     try {
                         localStorage.setItem('nfld_comments', JSON.stringify(this.comments));
                     } catch (e) {}
+                    
+                    // ---- GitHub Issues Integration ----
+                    if (GITHUB_TOKEN && GITHUB_TOKEN !== 'YOUR_GITHUB_PERSONAL_TOKEN_HERE') {
+                        this._saveCommentToGitHub().catch(console.error);
+                    }
+                    // ---------------------------------
+                    
                     this.newComment.name = '';
                     this.newComment.text = '';
+                    
+                    // Refresh the displayed comments list after a moment
+                    setTimeout(() => {
+                        window.dispatchEvent(new Event('commentsUpdated'));
+                    }, 500);
+                },
+                _saveCommentToGitHub() {
+                    const comment = this.comments[0]; // The newly added comment
+                    const title = `Family Comment: ${comment.name || 'Anonymous'}`;
+                    const body = `Category: ${comment.category}\n\nComment: ${comment.text}\n\nDate: ${comment.date}\n\n---\nSubmitted via Newfoundland Trip Planner`;
+                    
+                    return fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `token ${GITHUB_TOKEN}`,
+                            'Accept': 'application/vnd.github+json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            title: title,
+                            body: body
+                        })
+                    }).then(response => {
+                        if (!response.ok) {
+                            throw new Error(`GitHub API error: ${response.status}`);
+                        }
+                        return response.json();
+                    });
                 },
                 deleteComment(id) {
                     this.comments = this.comments.filter(c => c.id !== id);
